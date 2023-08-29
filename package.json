@@ -9,10 +9,10 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "synth-dev": "cdk synth -c config=dev -c profile=quang -c region=ap-southeast-1 --profile quang --require-approval=never --progress=events",
-    "deploy-dev": "cdk deploy \"*\" -c config=dev -c profile=quang -c region=ap-southeast-1 --profile quang --require-approval=never --progress=events",
-    "deploy-staging": "cdk deploy \"*\" -c config=staging -c profile=quang -c region=us-east-2 --profile quang --require-approval=never --progress=events",
-    "deploy-prod": "cdk deploy \"*\" -c config=prod -c profile=quang -c region=us-east-1 --profile quang --require-approval=never --progress=events"
+    "synth-dev": "cdk synth -c config=dev -c region=ap-southeast-1 --require-approval=never --progress=events",
+    "deploy-dev": "cdk deploy \"*\" -c config=dev -c region=ap-southeast-1 --require-approval=never --progress=events",
+    "deploy-staging": "cdk deploy \"*\" -c config=staging -c region=us-east-2 --require-approval=never --progress=events",
+    "deploy-prod": "cdk deploy \"*\" -c config=prod -c region=us-east-1 --require-approval=never --progress=events"
   },
   "devDependencies": {
     "@types/jest": "^29.5.1",

@@ -14,8 +14,8 @@ export const getConfig = async (app: any) => {
     const env = process.env.ENVIRONMENT || app.node.tryGetContext('config')
     if (!env) throw new Error('Context variable missing on CDK command. Pass in as `-c config=XXX`')
 
-    const awsProfile = process.env.AWS_PROFILE || app.node.tryGetContext('profile')
-    if (!awsProfile) throw new Error('Context variable missing on CDK command. Pass in as `-c profile=XXX`')
+    // const awsProfile = process.env.AWS_PROFILE || app.node.tryGetContext('profile')
+    // if (!awsProfile) throw new Error('Context variable missing on CDK command. Pass in as `-c profile=XXX`')
 
     const awsRegion = process.env.AWS_DEFAULT_REGION || app.node.tryGetContext('region')
     if (!awsRegion) throw new Error('Context variable missing on CDK command. Pass in as `-c region=XXX`')

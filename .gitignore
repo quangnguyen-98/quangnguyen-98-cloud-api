@@ -6,3 +6,9 @@ node_modules
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+
+
+.vscode
+/.idea/
+node_modules
+package.lock.json

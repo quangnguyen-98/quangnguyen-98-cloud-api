@@ -45,7 +45,7 @@ jobs:
                   node-version: '16.x'
 
             - name: Install cdk
-              run: yarn global add  cdk
+              run: yarn global add cdk
 
             - name: Install typescipt
               run: yarn global add typescript
@@ -74,7 +74,7 @@ jobs:
                   node-version: '16.x'
 
             - name: Install cdk
-              run: yarn global add  cdk
+              run: yarn global add cdk
 
             - name: Install typescipt
               run: yarn global add typescript
@@ -87,7 +87,7 @@ jobs:
               with:
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
                   aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
-                  aws-region: 'us-east-1'
+                  aws-region: ${{ secrets.AWS_REGION_STAGING }}
             - name: Deploy staging
               run: |
                   yarn run deploy-staging
@@ -103,7 +103,7 @@ jobs:
                   node-version: '16.x'
 
             - name: Install cdk
-              run: yarn global add  cdk
+              run: yarn global add cdk
 
             - name: Install typescipt
               run: yarn global add typescript
@@ -116,7 +116,7 @@ jobs:
               with:
                   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
                   aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
-                  aws-region: 'us-east-1'
+                  aws-region: ${{ secrets.AWS_REGION_PROD }}
             - name: Deploy prod
               run: |
                   yarn run deploy-prod

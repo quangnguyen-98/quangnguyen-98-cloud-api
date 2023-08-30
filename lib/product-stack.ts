@@ -15,7 +15,7 @@ import {
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class ProductStack extends Stack {
-    constructor(scope: Construct, id: string, props?: any) {
+    constructor(scope: Construct, id: string, props?: StackProps, buildConfig?: any) {
         super(scope, id, props)
 
         const defaultLambdaFnProps: NodejsFunctionProps = {
@@ -25,14 +25,7 @@ export class ProductStack extends Stack {
             },
             entry: join('src/index.ts'),
             environment: {
-                ENVIRONMENT: props?.buildConfig?.Environment || 'Dev',
-                //     PARTITION_KEY: 'PK',
-                //     SORT_KEY: 'SK',
-                //     INDEX: 'GSI',
-                //     INDEX_PARTITION_KEY: 'data',
-                //     CLOVER_SERVER: getCloverBaseDomain(`${props?.buildConfig?.Environment || 'Dev'}`.toLowerCase()),
-                //     REGION: props?.buildConfig?.AWSProfileRegion || 'ap-southeast-1',
-                //     POS_OPEN_SEARCH_DOMAIN_ENDPOINT: `https://${importedPosDomainEndpoint}`,
+                ENVIRONMENT: buildConfig?.Environment || 'dev',
             },
             runtime: Runtime.NODEJS_16_X,
         }
@@ -50,7 +43,7 @@ export class ProductStack extends Stack {
 
         const restApi = new RestApi(this, id + '-Api', {
             deployOptions: {
-                stageName: props.buildConfig?.Environment?.toLowerCase() || 'dev',
+                stageName: buildConfig?.Environment?.toLowerCase() || 'dev',
                 metricsEnabled: true,
                 loggingLevel: MethodLoggingLevel.INFO,
                 dataTraceEnabled: true,

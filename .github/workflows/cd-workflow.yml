@@ -2,16 +2,41 @@ name: CD - Release quangnguyen-api
 
 on:
     push:
-
-    pull_request:
+        # pull_request:
         branches:
             - dev
             - staging
             - master
     workflow_dispatch:
 jobs:
-    setup-env:
+    # setup-env:
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - uses: actions/checkout@v3
+    #         - uses: actions/setup-node@v3
+    #           with:
+    #               node-version: '16.x'
+
+    #         - name: Install cdk
+    #           run: yarn global add  cdk
+
+    #         - name: Install typescipt
+    #           run: yarn global add typescript
+
+    #         - name: Install dependency
+    #           run: yarn install
+
+    #         - name: Configure AWS credentials
+    #           uses: aws-actions/configure-aws-credentials@master
+    #           with:
+    #               aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+    #               aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
+    #               aws-region: 'us-east-1'
+
+    deploy-dev:
         runs-on: ubuntu-latest
+        # needs: setup-env
+        if: github.ref == 'refs/heads/dev'
         steps:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
@@ -19,7 +44,7 @@ jobs:
                   node-version: '16.x'
 
             - name: Install cdk
-              run: yarn install -g cdk
+              run: yarn global add cdk
 
             - name: Install typescipt
               run: yarn global add typescript
@@ -27,26 +52,70 @@ jobs:
             - name: Install dependency
               run: yarn install
 
-    deploy-dev:
-        runs-on: ubuntu-latest
-        needs: setup-env
-        if: success() && github.ref == 'refs/heads/dev'
-        steps:
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@master
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+                  aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
+                  aws-region: ${{ secrets.AWS_REGION_DEV }}
             - name: Deploy dev
-              run: yarn run deploy-dev
+              run: |
+                  yarn run deploy-dev
 
     deploy-staging:
         runs-on: ubuntu-latest
-        needs: setup-env
-        if: success() && github.ref == 'refs/heads/staging'
+        # needs: setup-env
+        if: github.ref == 'refs/heads/staging'
         steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: '16.x'
+
+            - name: Install cdk
+              run: yarn global add cdk
+
+            - name: Install typescipt
+              run: yarn global add typescript
+
+            - name: Install dependency
+              run: yarn install
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@master
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+                  aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
+                  aws-region: ${{ secrets.AWS_REGION_STAGING }}
             - name: Deploy staging
-              run: yarn run deploy-staging
+              run: |
+                  yarn run deploy-staging
 
     deploy-prod:
         runs-on: ubuntu-latest
-        needs: setup-env
-        if: success() && github.ref == 'refs/heads/master'
+        # needs: setup-env
+        if: github.ref == 'refs/heads/master'
         steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: '16.x'
+
+            - name: Install cdk
+              run: yarn global add cdk
+
+            - name: Install typescipt
+              run: yarn global add typescript
+
+            - name: Install dependency
+              run: yarn install
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v3
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+                  aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
+                  aws-region: ${{ secrets.AWS_REGION_PROD }}
             - name: Deploy prod
-              run: yarn run deploy-prod
+              run: |
+                  yarn run deploy-prod

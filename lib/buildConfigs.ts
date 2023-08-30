@@ -1,4 +1,5 @@
 import * as aws from 'aws-sdk'
+import * as yaml from 'js-yaml'
 
 export const toCapitalized = (word: string) => {
     return word.charAt(0).toUpperCase() + word.slice(1)
@@ -14,8 +15,8 @@ export const getConfig = async (app: any) => {
     const env = process.env.ENVIRONMENT || app.node.tryGetContext('config')
     if (!env) throw new Error('Context variable missing on CDK command. Pass in as `-c config=XXX`')
 
-    const awsProfile = process.env.AWS_PROFILE || app.node.tryGetContext('profile')
-    if (!awsProfile) throw new Error('Context variable missing on CDK command. Pass in as `-c profile=XXX`')
+    // const awsProfile = process.env.AWS_PROFILE || app.node.tryGetContext('profile')
+    // if (!awsProfile) throw new Error('Context variable missing on CDK command. Pass in as `-c profile=XXX`')
 
     const awsRegion = process.env.AWS_DEFAULT_REGION || app.node.tryGetContext('region')
     if (!awsRegion) throw new Error('Context variable missing on CDK command. Pass in as `-c region=XXX`')
@@ -25,18 +26,20 @@ export const getConfig = async (app: any) => {
         // profile: awsProfile,
     })
 
-    // const ssm = new aws.SSM()
-    // const ssmParamName = 'rpay-configuration-' + env
-    // console.log('### Getting config from SSM Parameter store with name: ' + ssmParamName)
-    // const ssmResponse = await ssm.getParameter({ Name: ssmParamName }).promise()
-    // console.log('### Got config!!')
+    const ssm = new aws.SSM()
+    const ssmParamName = 'quang-config-' + env
+    console.log('### Getting config from SSM Parameter store with name: ' + ssmParamName)
+    const ssmResponse = await ssm.getParameter({ Name: ssmParamName }).promise()
+
+    console.log('### Got config!!')
     // const unparsedEnv: any = yaml.load(ssmResponse?.Parameter?.Value || '')
+    const unparsedEnv = JSON.parse(ssmResponse?.Parameter?.Value || '{}')
+
     const buildConfig: any = {
         Environment: env,
-
-        // AWSAccountID: ensureString(unparsedEnv, 'AWSAccountID'),
+        AWSAccountID: ensureString(unparsedEnv, 'AWSAccountID'),
         // AWSProfileName: ensureString(unparsedEnv, 'AWSProfileName'),
-        // AWSProfileRegion: ensureString(unparsedEnv, 'AWSProfileRegion'),
+        AWSProfileRegion: ensureString(unparsedEnv, 'AWSProfileRegion'),
 
         // App: ensureString(unparsedEnv, 'App'),
         // Version: ensureString(unparsedEnv, 'Version'),

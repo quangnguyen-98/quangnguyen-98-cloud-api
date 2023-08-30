@@ -1,4 +1,5 @@
 import * as aws from 'aws-sdk'
+import * as yaml from 'js-yaml'
 
 export const toCapitalized = (word: string) => {
     return word.charAt(0).toUpperCase() + word.slice(1)
@@ -25,18 +26,20 @@ export const getConfig = async (app: any) => {
         // profile: awsProfile,
     })
 
-    // const ssm = new aws.SSM()
-    // const ssmParamName = 'rpay-configuration-' + env
-    // console.log('### Getting config from SSM Parameter store with name: ' + ssmParamName)
-    // const ssmResponse = await ssm.getParameter({ Name: ssmParamName }).promise()
-    // console.log('### Got config!!')
+    const ssm = new aws.SSM()
+    const ssmParamName = 'quang-config-' + env
+    console.log('### Getting config from SSM Parameter store with name: ' + ssmParamName)
+    const ssmResponse = await ssm.getParameter({ Name: ssmParamName }).promise()
+
+    console.log('### Got config!!')
     // const unparsedEnv: any = yaml.load(ssmResponse?.Parameter?.Value || '')
+    const unparsedEnv = JSON.parse(ssmResponse?.Parameter?.Value || '{}')
+
     const buildConfig: any = {
         Environment: env,
-
-        // AWSAccountID: ensureString(unparsedEnv, 'AWSAccountID'),
+        AWSAccountID: ensureString(unparsedEnv, 'AWSAccountID'),
         // AWSProfileName: ensureString(unparsedEnv, 'AWSProfileName'),
-        // AWSProfileRegion: ensureString(unparsedEnv, 'AWSProfileRegion'),
+        AWSProfileRegion: ensureString(unparsedEnv, 'AWSProfileRegion'),
 
         // App: ensureString(unparsedEnv, 'App'),
         // Version: ensureString(unparsedEnv, 'Version'),
@@ -48,6 +51,7 @@ export const getConfig = async (app: any) => {
         //     TenantPublicApiUrl: ensureString(unparsedEnv['Parameters'], 'TenantPublicApiUrl'),
         // },
     }
+    console.log('build cg--', buildConfig)
 
     return buildConfig
 }

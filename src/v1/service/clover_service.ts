@@ -27,8 +27,8 @@ export async function main(event: any) {
         body: JSON.stringify({
             success: true,
             data: {
-                name: 'quang 123',
-                age: 12,
+                name: 'quang 123456',
+                age: 12000,
                 env: process.env.ENVIRONMENT,
             },
         }),

@@ -51,7 +51,6 @@ export const getConfig = async (app: any) => {
         //     TenantPublicApiUrl: ensureString(unparsedEnv['Parameters'], 'TenantPublicApiUrl'),
         // },
     }
-    console.log('build cg--', buildConfig)
 
     return buildConfig
 }
